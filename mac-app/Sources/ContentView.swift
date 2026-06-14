@@ -41,11 +41,14 @@ struct ContentView: View {
                         .font(.headline)
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
+                    Text("拖入新视频 · 或点击此处更换")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 } else {
                     Text("将视频文件拖放到此处")
                         .font(.headline)
                         .foregroundStyle(.secondary)
-                    Text("支持 mp4 / mov / mkv 等常见格式")
+                    Text("支持 mp4 / mov / mkv 等常见格式 · 也可点击选择")
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 }
@@ -53,8 +56,19 @@ struct ContentView: View {
             .padding()
         }
         .frame(height: 120)
+        .contentShape(Rectangle())
+        .onTapGesture { viewModel.showingImporter = true }
         .onDrop(of: [.fileURL], isTargeted: $viewModel.isTargeted) { providers in
             viewModel.handleDrop(providers: providers)
+        }
+        .fileImporter(
+            isPresented: $viewModel.showingImporter,
+            allowedContentTypes: [.audiovisualContent, .movie, .video],
+            allowsMultipleSelection: false
+        ) { result in
+            if case .success(let urls) = result, let url = urls.first {
+                Task { await viewModel.loadVideo(url: url) }
+            }
         }
     }
 
@@ -288,6 +302,7 @@ final class TrimViewModel: ObservableObject {
     @Published var progressText: String = ""
     @Published var progress: Double = 0
     @Published var mergeOutput: Bool = false
+    @Published var showingImporter = false
     @Published var ffmpegAvailable = false
 
     var durationText: String {

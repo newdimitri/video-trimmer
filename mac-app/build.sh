@@ -68,6 +68,9 @@ mkdir -p "$APP_BUNDLE/Contents/Resources"
 cp "$BUILD_DIR/$EXEC_NAME" "$APP_BUNDLE/Contents/MacOS/$EXEC_NAME"
 cp "$FFMPEG_BIN" "$APP_BUNDLE/Contents/Resources/ffmpeg"
 cp "$SCRIPT_DIR/Info.plist" "$APP_BUNDLE/Contents/Info.plist"
+if [[ -f "$RESOURCES_DIR/AppIcon.icns" ]]; then
+    cp "$RESOURCES_DIR/AppIcon.icns" "$APP_BUNDLE/Contents/Resources/AppIcon.icns"
+fi
 
 chmod +x "$APP_BUNDLE/Contents/MacOS/$EXEC_NAME"
 chmod +x "$APP_BUNDLE/Contents/Resources/ffmpeg"
