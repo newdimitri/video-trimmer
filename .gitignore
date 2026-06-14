@@ -1,0 +1,11 @@
+# macOS 构建产物 / 下载的二进制(可由 build.sh 重新生成,不入库)
+mac-app/Resources/ffmpeg
+mac-app/build/
+mac-app/视频裁剪.app/
+*.app/
+
+# 系统/编辑器
+.DS_Store
+*.swp
+__pycache__/
+*.pyc
